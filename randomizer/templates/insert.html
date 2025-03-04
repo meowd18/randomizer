@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Insertion</title>
+</head>
+<body>
+<form method="post" action="{% url 'insert' %}">
+    {% csrf_token %}
+    {{ form_game.as_p }}
+    <button type="submit" name="insert">Ajouter</button>
+</form>
+<br>
+{% if msg %}
+<br>
+{{msg}}
+{% endif %}
+</body>
+</html>

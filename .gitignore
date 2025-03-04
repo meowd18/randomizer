@@ -1,0 +1,89 @@
+# Fichiers générés par Python
+*.pyc
+*.pyo
+__pycache__
+
+# Fichiers générés par Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+media
+
+# Environnement virtuel
+venv/
+venv3/
+pyvenv/
+.env/
+env/
+env_bkp/
+env1/
+env2/
+
+# Fichiers de configuration
+*.bak
+*.swp
+*~
+
+# Dossier de configuration pour PyCharm
+.idea/
+
+# Dossier de configuration pour VS Code
+.vscode/
+
+# Dossier de configuration pour Sublime Text
+.sublime*
+
+# Dossiers de fichiers de sauvegarde
+backup*/
+backups*/
+
+# Fichiers de gestion de dépendances
+pip-log.txt
+requirements.txt
+
+# Fichiers de gestion de l'environnement
+.env
+
+# Fichiers de cache
+__pycache__/
+
+# Dossiers spécifiques à Django
+/static/
+/media/
+
+# Fichiers de configuration pour Heroku
+*.pyc
+*~
+db.sqlite3
+__pycache__
+.env
+
+# Dossier de configuration pour Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Fichiers de log de Docker
+docker-compose*.yml
+docker-compose*.yaml
+*.log
+
+# Fichiers de sauvegarde d'éditeur
+*~
+
+# Dossiers spécifiques à PyInstaller
+dist/
+build/
+
+# Fichiers spécifiques à pytest
+__pycache__/
+.pytest_cache/
+
+# Fichiers spécifiques à mypy
+.mypy_cache/
+
+# Dossiers spécifiques à Pyre
+.pyre/
+
+# Fichiers spécifiques à pipenv
+Pipfile.lock
