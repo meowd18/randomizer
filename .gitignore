@@ -41,7 +41,6 @@ backups*/
 
 # Fichiers de gestion de dépendances
 pip-log.txt
-requirements.txt
 
 # Fichiers de gestion de l'environnement
 .env
