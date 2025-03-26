@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-*pisur&xk+)wb%u7$o%0(-*1@z8i9)*ya373lt1p@x%^i_80w7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'randomizer-reoz.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://randomizer-reoz.onrender.com']
 
 # Application definition
 
