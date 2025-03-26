@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Jeux
 from .forms import *
 from django.db.models import Q
@@ -31,30 +31,35 @@ def accueil(request):
                 favori = form_random.cleaned_data['favori']
                 jamais_joué = form_random.cleaned_data['jamais_joué']
 
+                filters = Q()
+
                 if coop == "0":
-                    x = "compétitif"
+                    x = "competitif"
+                    filters &= Q(competitif=True)
                 elif coop == "1":
-                    x = "en coop"
+                    x = "coop"
+                    filters &= Q(coop=True)
                 elif coop == "2":
-                    x = "en équipe"
+                    x = "equipe"
+                    filters &= Q(equipe=True)
                 elif coop == "":
                     x = None
 
-#                random = Jeux.objects.order_by('?').first()
+                #random = Jeux.objects.order_by('?').first()
 
                 #trouver jeux selon critères
                 #print(f"ok je cherche un jeu pour {joueurs} joueur{'s' if joueurs > 1 else ''} qui dure {min_max} {duree} minutes {'et qui soit ' + x if x else ''}")
 
-                filters = Q()
 
-                if x:
+
+                '''if x:
                     filters &= Q(coop=coop)
 
                 if duree is not None:
                     if min_max == "minimum":
                         filters &= Q(duree_max__gte=duree)
                     elif min_max == "maximum":
-                        filters &= Q(duree_min__lte=duree)
+                        filters &= Q(duree_min__lte=duree)'''
 
                 if joueurs is not None:
                     filters &= Q(joueurs_min__lte=joueurs) & Q(joueurs_max__gte=joueurs)
@@ -66,7 +71,7 @@ def accueil(request):
 
                 if filters == Q():
                     results = Jeux.objects.order_by('?').first()
-                    liste_jeux.append(results.nom)
+                    liste_jeux.append(results)
                 else:
                     results = Jeux.objects.filter(filters)
 
@@ -74,13 +79,21 @@ def accueil(request):
 
                     for jeu in results:
                         #print(jeu.nom)
-                        liste_jeux.append(jeu.nom)
+                        liste_jeux.append(jeu)
 
                 if nb_result:
                     liste_jeux = random.sample(liste_jeux, nb_result)
 
                 if len(liste_jeux) == 0:
                     msg = "Aucun jeu ne correspond à ces critères"
+
+        elif "played" in request.POST:
+            print("played")
+            jeu_id = request.POST.get("jeu_id")
+            jeu = get_object_or_404(Jeux, id=jeu_id)
+            print(jeu)
+            jeu.jamais_joué = False
+            jeu.save()
 
     return render(request, "accueil.html",
                             {'form_random': form_random,

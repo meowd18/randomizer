@@ -16,7 +16,13 @@ Bonjour toi !
 {% if liste_jeux %}
 <br>
 {% for jeu in liste_jeux %}
-{{ jeu }}<br>
+<form method="POST" action="{% url 'accueil' %}">
+    {% csrf_token %}
+    {{ jeu.nom }}
+    <input type="hidden" name="jeu_id" value="{{ jeu.id }}">
+    <button type="submit" name="played">J'y ai joué !</button>
+</form>
+<br>
 {% endfor %}
 {% endif %}
 </body>

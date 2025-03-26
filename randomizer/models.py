@@ -9,13 +9,13 @@ class Jeux(models.Model):
     durée min
     durée max
     compétitif/coop/équipe
-    '''
+
     COOP_CHOICES = [
         (0, 'Non coopératif'),
         (1, 'Coopératif'),
         (2, 'En équipe'),
     ]
-
+    '''
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=250, db_index=True, unique=True)
     joueurs_min = models.IntegerField()
@@ -24,5 +24,6 @@ class Jeux(models.Model):
     duree_max = models.IntegerField()
     favori = models.BooleanField(null=True)
     jamais_joué = models.BooleanField(null=True)
-    coop = models.IntegerField(
-        choices=COOP_CHOICES)
+    coop = models.BooleanField(null=True)
+    competitif = models.BooleanField(null=True)
+    equipe = models.BooleanField(null=True)

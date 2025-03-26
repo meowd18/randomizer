@@ -18,7 +18,7 @@ class GameForm(forms.ModelForm):
 class randForm(forms.ModelForm):
     coop = forms.ChoiceField(required=False, choices = [
                                                      ("", ""),
-                                                     (0, 'Non coopératif'),
+                                                     (0, 'Compétitif'),
                                                      (1, 'Coopératif'),
                                                      (2, 'En équipe')
                                                  ])
@@ -34,4 +34,4 @@ class randForm(forms.ModelForm):
 
     class Meta:
         model = Jeux
-        fields = ["coop", "favori"]
+        fields = ["favori"]
