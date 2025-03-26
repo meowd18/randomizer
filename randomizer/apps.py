@@ -1,6 +1,7 @@
 from django.apps import AppConfig
-from django.core.management import call_command
 from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+import os
 
 
 class RandomizerConfig(AppConfig):
@@ -17,9 +18,15 @@ def insert_initial_data(sender, **kwargs):
     from .models import Jeux
     from djangomizer.utils import insert_data
 
-    file = randomizer_jeux.ods
+    file = "randomizer_jeux.ods"
 
     if Jeux.objects.count() == 0:
         insert_data(file)
 
     print(Jeux.objects.count())
+
+    from django.contrib.auth.models import User
+    if User.objects.count() == 0:
+        #User.objects.create_superuser(username=os.getenv(config["SU_username"], "test"), password=os.getenv(config["SU_password"], "test"))
+        User.objects.create_superuser(username="admin", password="admin")
+        print("Superuser créé avec succès")

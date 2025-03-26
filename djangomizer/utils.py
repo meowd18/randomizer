@@ -3,7 +3,7 @@ import pandas as pd
 import os, sys
 #from randomizer.models import Jeux
 
-"../jeux.ods", engine="odf"
+#"../jeux.ods", engine="odf"
 
 def insert_data(ods_file):
     #insérer les données initiales
