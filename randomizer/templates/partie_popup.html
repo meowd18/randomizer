@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="formPopup" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="jeu_id" value="{{ jeu.id }}">
+    <input type="hidden" name="jeu" value="{{ jeu }}">
+    {{ partie_form.as_p }}
+    <button type="submit" name="save">Enregistrer</button>
+</form>
+
+</body>
+</html>

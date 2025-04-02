@@ -3,6 +3,10 @@ from .models import Jeux
 from .forms import *
 from django.db.models import Q
 import random
+from django.http import JsonResponse
+import datetime
+
+
 
 # Create your views here.
 def accueil(request):
@@ -18,7 +22,7 @@ def accueil(request):
         if 'find' in request.POST:
             form_random = randForm(request.POST)
             if not form_random.is_valid():
-                msg = str(form_pat.errors)
+                msg = str(form_random.errors)
                 print(msg)
 
             else:
@@ -87,13 +91,13 @@ def accueil(request):
                 if len(liste_jeux) == 0:
                     msg = "Aucun jeu ne correspond à ces critères"
 
-        elif "played" in request.POST:
+        '''elif "played" in request.POST:
             print("played")
             jeu_id = request.POST.get("jeu_id")
             jeu = get_object_or_404(Jeux, id=jeu_id)
             print(jeu)
             jeu.jamais_joué = False
-            jeu.save()
+            jeu.save()'''
 
     return render(request, "accueil.html",
                             {'form_random': form_random,
@@ -111,7 +115,7 @@ def insert(request):
             if 'insert' in request.POST:
                 form_game = GameForm(request.POST)
                 if not form_game.is_valid():
-                    msg = str(form_pat.errors)
+                    msg = str(form_game.errors)
                     print(msg)
                 else:
                     try:
@@ -127,3 +131,37 @@ def insert(request):
         return render(request, "insert.html",
         {'form_game': form_game,
         'msg': msg})
+
+
+def get_form(request):
+    if request.method == "GET":
+        jeu_id = request.GET.get("jeu_id")
+        game = get_object_or_404(Jeux, id=jeu_id)
+        jeu = game.nom
+        partie_form = PartieForm()
+        return render(request, "partie_popup.html",
+        {'partie_form': partie_form,
+        "jeu": game})
+
+    if request.method == "POST":
+        jeu_nom = request.POST.get("jeu")
+        jeu_id = request.POST.get("jeu_id")
+        partie_form = PartieForm(request.POST)
+        print("JEU ID: ", jeu_id)
+        if not partie_form.is_valid():
+            msg = str(partie_form.errors)
+            print("ERREUR: ", msg)
+        else:
+            try:
+                date = datetime.datetime.now()
+                duree = partie_form.cleaned_data['duree']
+                partie = Partie(date=date, duree=duree, nom_id=jeu_id)
+                print(date, duree, jeu_id)
+                partie.save()
+
+            except Exception as e:
+                msg = str(e)
+                print(f"Informations sur l'erreur: {msg}")
+
+
+        return JsonResponse({"message": "Formulaire soumis avec succès !"})

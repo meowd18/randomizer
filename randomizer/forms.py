@@ -1,5 +1,5 @@
 from django import forms
-from .models import Jeux
+from .models import *
 
 class GameForm(forms.ModelForm):
     class Meta:
@@ -35,3 +35,9 @@ class randForm(forms.ModelForm):
     class Meta:
         model = Jeux
         fields = ["favori"]
+
+
+class PartieForm(forms.ModelForm):
+    class Meta:
+        model = Partie
+        fields = ["duree"]

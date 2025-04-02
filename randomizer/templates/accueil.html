@@ -3,6 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Accueil</title>
+    <style>
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border: 1px solid black;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+        }
+    </style>
 </head>
 <body>
 Bonjour toi !
@@ -20,10 +33,59 @@ Bonjour toi !
     {% csrf_token %}
     {{ jeu.nom }}
     <input type="hidden" name="jeu_id" value="{{ jeu.id }}">
-    <button type="submit" name="played">J'y ai joué !</button>
+    <button type="button" class="openPopup" data-jeu-id="{{ jeu.id }}">J'y ai joué !</button>
 </form>
 <br>
 {% endfor %}
 {% endif %}
+
+
+<div id="popup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; box-shadow: 0px 0px 10px rgba(0,0,0,0.5);">
+    <button id="closePopup">Fermer</button>
+    <div id="popupContent"></div>
+</div>
+
+
+<script>
+    document.querySelectorAll(".openPopup").forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            let jeuId = this.getAttribute("data-jeu-id");  // Récupère l'ID du jeu
+
+            console.log("Jeu ID envoyé :", jeuId);  // DEBUG : Vérifier que l'ID est bien récupéré
+
+            fetch(`/get-form/?jeu_id=${jeuId}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("popupContent").innerHTML = html;
+                document.getElementById("popup").style.display = "block";
+
+                    // Ajouter un gestionnaire d'événement pour la soumission du formulaire
+                    document.getElementById("formPopup").addEventListener("submit", function(event) {
+                        event.preventDefault();
+
+                        let formData = new FormData(this);
+
+                        fetch("/get-form/", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            document.getElementById("popup").style.display = "none";
+                        });
+                    });
+                });
+            });
+        });
+
+        // Fermer la popup
+        document.getElementById("closePopup").addEventListener("click", function() {
+            document.getElementById("popup").style.display = "none";
+        });
+</script>
+
 </body>
 </html>

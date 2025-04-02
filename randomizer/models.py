@@ -27,3 +27,14 @@ class Jeux(models.Model):
     coop = models.BooleanField(null=True)
     competitif = models.BooleanField(null=True)
     equipe = models.BooleanField(null=True)
+
+class Partie(models.Model):
+    '''
+    date
+    jeu
+    durée de la partie
+    '''
+    id = models.AutoField(primary_key=True)
+    date = models.DateField()
+    duree = models.IntegerField()
+    nom = models.ForeignKey(Jeux, on_delete=models.CASCADE)
