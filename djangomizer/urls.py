@@ -24,4 +24,5 @@ urlpatterns = [
     path("insert", insert, name="insert"),
     path("", index, name="index"),
     path("get-form/", get_form, name="get_form"),
+    path("update", update, name="update"),
 ]

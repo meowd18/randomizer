@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for jeu in need_update %}
+{% for key, value in jeu.items %}
+{% if key == "jeu" %}
+La durée moyenne pour {{ value }} est de
+{% elif key == "moyenne" %}
+{{ value }} minutes,
+{% elif key == "duree_min" %}
+alors que la durée minimale est de {{ value }} minutes
+{% elif key == "duree_max" %}
+alors que la durée maximale est de {{ value }} minutes.
+{% endif %}
+{% endfor %}
+<br>
+{% endfor %}
+
+</body>
+</html>

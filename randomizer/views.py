@@ -5,6 +5,7 @@ from django.db.models import Q
 import random
 from django.http import JsonResponse
 import datetime
+from django.db.models import Avg
 
 
 
@@ -147,7 +148,6 @@ def get_form(request):
         jeu_nom = request.POST.get("jeu")
         jeu_id = request.POST.get("jeu_id")
         partie_form = PartieForm(request.POST)
-        print("JEU ID: ", jeu_id)
         if not partie_form.is_valid():
             msg = str(partie_form.errors)
             print("ERREUR: ", msg)
@@ -164,4 +164,30 @@ def get_form(request):
                 print(f"Informations sur l'erreur: {msg}")
 
 
-        return JsonResponse({"message": "Formulaire soumis avec succès !"})
+        return JsonResponse({"message": "Partie enregistrée avec succès !"})
+
+def update(request):
+    jeux = Jeux.objects.all()
+    need_update = []
+    dict = {}
+    for jeu in jeux:
+        moy = Partie.objects.filter(nom=jeu.id).aggregate(moyenne_duree=Avg('duree'))
+        moyenne = moy["moyenne_duree"]
+        if moyenne:
+            duree_min = jeu.duree_min
+            duree_max = jeu.duree_max
+            if moyenne > duree_max:
+                dict= {"jeu" : jeu.nom,
+                "moyenne" : moyenne,
+                "duree_max" : duree_max}
+                need_update.append(dict)
+            elif moyenne < duree_min:
+                dict= {"jeu" : jeu.nom,
+                "moyenne" : moyenne,
+                "duree_min" : duree_min}
+                need_update.append(dict)
+    if len(need_update) == 0:
+        return redirect("accueil")
+    else:
+        return render(request, "update.html",
+                    {'need_update': need_update})
