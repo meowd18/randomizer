@@ -86,11 +86,20 @@ def accueil(request):
                         #print(jeu.nom)
                         liste_jeux.append(jeu)
 
-                if nb_result:
+                if nb_result and nb_result <= len(liste_jeux):
                     liste_jeux = random.sample(liste_jeux, nb_result)
 
                 if len(liste_jeux) == 0:
                     msg = "Aucun jeu ne correspond à ces critères"
+                    return render(request, "accueil.html",
+                                            {'form_random': form_random,
+                                                    'msg': msg})
+
+                else:
+                    return render(request, "accueil.html",
+                                            {'form_random': form_random,
+                                                    'msg': msg,
+                                                    'liste_jeux': liste_jeux})
 
         '''elif "played" in request.POST:
             print("played")
@@ -100,10 +109,7 @@ def accueil(request):
             jeu.jamais_joué = False
             jeu.save()'''
 
-    return render(request, "accueil.html",
-                            {'form_random': form_random,
-                                    'msg': msg,
-                                    'liste_jeux': liste_jeux})
+
 
 def index(request):
     return redirect("accueil")
