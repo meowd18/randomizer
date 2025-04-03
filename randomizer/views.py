@@ -95,19 +95,12 @@ def accueil(request):
                                             {'form_random': form_random,
                                                     'msg': msg})
 
-                else:
-                    return render(request, "accueil.html",
-                                            {'form_random': form_random,
-                                                    'msg': msg,
-                                                    'liste_jeux': liste_jeux})
 
-        '''elif "played" in request.POST:
-            print("played")
-            jeu_id = request.POST.get("jeu_id")
-            jeu = get_object_or_404(Jeux, id=jeu_id)
-            print(jeu)
-            jeu.jamais_joué = False
-            jeu.save()'''
+    return render(request, "accueil.html",
+                            {'form_random': form_random,
+                                    'msg': msg,
+                                    'liste_jeux': liste_jeux})
+
 
 
 
@@ -159,6 +152,13 @@ def get_form(request):
             print("ERREUR: ", msg)
         else:
             try:
+                #modifier jamais joué
+                jeu = get_object_or_404(Jeux, id=jeu_id)
+                if jeu.jamais_joué == True:
+                    print("jamais joué")
+                    jeu.jamais_joué = False
+                    jeu.save()
+                #enregistrer partie
                 date = datetime.datetime.now()
                 duree = partie_form.cleaned_data['duree']
                 partie = Partie(date=date, duree=duree, nom_id=jeu_id)
