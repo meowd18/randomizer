@@ -9,7 +9,8 @@
     {% csrf_token %}
     <input type="hidden" name="jeu_id" value="{{ jeu.id }}">
     <input type="hidden" name="jeu" value="{{ jeu }}">
-    {{ partie_form.as_p }}
+    <label for="duree">Durée (en minutes) :</label>
+    <input type="number" name="duree" id="duree" required min="1" step="5">
     <button type="submit" name="save">Enregistrer</button>
 </form>
 

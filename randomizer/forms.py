@@ -38,6 +38,8 @@ class randForm(forms.ModelForm):
 
 
 class PartieForm(forms.ModelForm):
+    #nom = forms.CharField(label="Nom du jeu", required=False, disabled=True)
+
     class Meta:
         model = Partie
-        fields = ["duree"]
+        fields = ["duree", "nom"]

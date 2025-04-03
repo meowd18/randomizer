@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Jeux
 from .forms import *
+from djangomizer.utils import *
 from django.db.models import Q
 import random
 from django.http import JsonResponse
@@ -132,13 +133,39 @@ def insert(request):
         {'form_game': form_game,
         'msg': msg})
 
+def parties(request):
+    partie_form = PartieForm()
+    msg = ""
+    if request.method == "POST":
+        partie_form = PartieForm(request.POST)
+        if not partie_form.is_valid():
+            msg = str(partie_form.errors)
+            print("ERREUR: ", msg)
+        else:
+            duree = partie_form.cleaned_data['duree']
+            jeu = partie_form.cleaned_data['nom']
+            jeu_id = jeu.id
+            try:
+                insert_partie(jeu_id, duree)
+                msg = "Partie enregistrée"
+                return render(request, "parties.html",
+                    {'partie_form': partie_form,
+                    'msg': msg})
+            except Exception as e:
+                msg = str(e)
+                print(f"Informations sur l'erreur: {msg}")
+
+        #get jeu_id from form
+    return render(request, "parties.html",
+        {'partie_form': partie_form,
+        'msg': msg})
+
 
 def get_form(request):
     if request.method == "GET":
         jeu_id = request.GET.get("jeu_id")
         game = get_object_or_404(Jeux, id=jeu_id)
         jeu = game.nom
-        partie_form = PartieForm()
         return render(request, "partie_popup.html",
         {'partie_form': partie_form,
         "jeu": game})
@@ -146,24 +173,14 @@ def get_form(request):
     if request.method == "POST":
         jeu_nom = request.POST.get("jeu")
         jeu_id = request.POST.get("jeu_id")
-        partie_form = PartieForm(request.POST)
-        if not partie_form.is_valid():
+        duree = request.POST.get("duree")
+        if not duree:
             msg = str(partie_form.errors)
             print("ERREUR: ", msg)
         else:
             try:
-                #modifier jamais joué
-                jeu = get_object_or_404(Jeux, id=jeu_id)
-                if jeu.jamais_joué == True:
-                    print("jamais joué")
-                    jeu.jamais_joué = False
-                    jeu.save()
-                #enregistrer partie
-                date = datetime.datetime.now()
-                duree = partie_form.cleaned_data['duree']
-                partie = Partie(date=date, duree=duree, nom_id=jeu_id)
-                print(date, duree, jeu_id)
-                partie.save()
+                duree = request.POST.get("duree")
+                insert_partie(jeu_id, duree)
 
             except Exception as e:
                 msg = str(e)
@@ -197,3 +214,4 @@ def update(request):
     else:
         return render(request, "update.html",
                     {'need_update': need_update})
+

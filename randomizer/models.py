@@ -28,6 +28,9 @@ class Jeux(models.Model):
     competitif = models.BooleanField(null=True)
     equipe = models.BooleanField(null=True)
 
+    def __str__(self):
+        return self.nom
+
 class Partie(models.Model):
     '''
     date

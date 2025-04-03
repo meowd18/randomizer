@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parties</title>
+</head>
+<body>
+<h1>Rensigner les parties jouées</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ partie_form.as_p }}
+    <button type="submit" name="save">Enregistrer</button>
+</form>
+<br>
+{% if msg %}
+{{ msg }}
+{% endif %}
+<h1>Visualiser les parties jouées</h1>
+en construction
+</body>
+</html>
